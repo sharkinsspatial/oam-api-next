@@ -24,7 +24,7 @@ import {
   Index
 } from 'typeorm';
 
-import { User } from './User';
+import { User } from './user';
 
 @Entity('items')
 export class Item extends BaseEntity  {

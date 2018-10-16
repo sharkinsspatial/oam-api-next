@@ -1,7 +1,7 @@
 {
 	"extends": "tslint-config-airbnb",
 	"rules": {
-		"trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+		"trailing-comma": [true, { "multiline": "never", "singleline": "never"}],
+    "import-name": [ true, { "tapeAwait": "test" }]
 	}
-	
 }

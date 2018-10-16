@@ -21,7 +21,7 @@ import {
   validate
 } from 'class-validator';
 
-import { Item } from './Item';
+import { Item } from './item';
 
 @Entity('users')
 export class User extends BaseEntity {

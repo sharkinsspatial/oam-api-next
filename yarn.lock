@@ -2333,6 +2333,10 @@ supports-color@^5.2.0, supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
+tape-await@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/tape-await/-/tape-await-0.1.1.tgz#c414aa33631ee653e1de0f7a3a92c4468cfee321"
+
 tar@^4:
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/tar/-/tar-4.4.6.tgz#63110f09c00b4e60ac8bcfe1bf3c8660235fbc9b"

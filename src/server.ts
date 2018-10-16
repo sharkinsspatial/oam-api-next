@@ -1,5 +1,4 @@
 import * as Koa from 'koa';
-import * as jwt from 'koa-jwt';
 import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as cors from '@koa/cors';
@@ -13,8 +12,11 @@ import { logger } from './logging';
 import { config } from './config';
 import { router } from './routes';
 
+import { User } from './entity/user';
+import { Item } from './entity/item';
+
 // Load environment variables from .env file, where API keys and passwords are configured
-dotenv.config({ path: '.env' });
+// dotenv.config({ path: '.env' });
 
 // Get DB connection options from env variable
 const connectionOptions = PostgressConnectionStringParser.parse(config.databaseUrl);
@@ -32,7 +34,8 @@ createConnection({
   synchronize: true,
   logging: false,
   entities: [
-    'dist/entity/**/*.js'
+    User,
+    Item
   ],
   extra: {
     ssl: config.dbsslconn // if not development, will use SSL
@@ -55,7 +58,7 @@ createConnection({
 
   // JWT middleware -> below this line routes are only reached if JWT token
   // is valid, secret as env variable
-  app.use(jwt({ secret: config.jwtSecret }));
+  // app.use(jwt({ secret: config.jwtSecret }));
 
   // this routes are protected by the JWT middleware, also include middleware
   // to respond with "Method Not Allowed - 405".

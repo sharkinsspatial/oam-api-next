@@ -12,6 +12,7 @@ export default class GeneralController {
     ctx.status = 201;
     // the body of the response will contain the information contained as payload in the JWT
     ctx.body = ctx.state.user;
+
   }
 
 }
