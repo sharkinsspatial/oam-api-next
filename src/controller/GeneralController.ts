@@ -1,7 +1,6 @@
 import { BaseContext } from 'koa';
 
 export default class GeneralController {
-
   public static async helloWorld (ctx: BaseContext) {
     ctx.body = 'Hello World!';
   }
@@ -14,5 +13,4 @@ export default class GeneralController {
     ctx.body = ctx.state.user;
 
   }
-
 }
