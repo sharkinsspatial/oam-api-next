@@ -90,4 +90,9 @@ export class User extends BaseEntity {
     name: 'updated_at'
   })
   updatedAt: Date;
+
+  @Column({
+    name: 'mongo_id'
+  })
+  mongoId: string;
 }
