@@ -3,6 +3,7 @@ import { createConnection } from 'typeorm';
 import * as dotenv from 'dotenv';
 import * as PostgressConnectionStringParser from 'pg-connection-string';
 import polylabel from 'polylabel';
+import bboxPolygon from '@turf/bbox-polygon';
 import { Geometry } from 'geojson';
 import { config } from '../src/config';
 import { BinarySplitter } from './binarySplitter';
@@ -42,7 +43,8 @@ class ItemImporter extends Writable {
         }
         let centroidGeom;
         if (meta.geojson.type === 'MultiPolygon') {
-          centroidGeom = polylabel(meta.bbox);
+          const bboxGeoJSON = bboxPolygon(meta.bbox);
+          centroidGeom = polylabel(bboxGeoJSON.geometry.coordinates);
         } else {
           centroidGeom = polylabel(meta.geojson.coordinates);
         }

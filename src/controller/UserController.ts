@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getRepository, Repository, Not, Equal } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
 import { User } from '../entity/user';
 

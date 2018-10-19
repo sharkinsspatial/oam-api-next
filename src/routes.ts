@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import { config } from './config';
 import GeneralController from './controller/GeneralController';
 import UserController from './controller/UserController';
+import ItemsController from './controller/ItemsController';
 
 const router = new Router();
 
@@ -19,6 +20,7 @@ router.get('/secure1', (ctx, next) => {
 // USER ROUTES
 router.get('/users', UserController.getUsers);
 router.get('/users/:id', UserController.getUser);
+router.get('/centroids', ItemsController.getItemCentroids);
 //router.post('/users', controller.user.createUser);
 //router.put('/users/:id', controller.user.updateUser);
 //router.delete('/users/:id', controller.user.deleteUser);
