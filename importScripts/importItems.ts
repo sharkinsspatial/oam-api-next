@@ -2,6 +2,8 @@ import { Writable } from 'stream';
 import { createConnection } from 'typeorm';
 import * as dotenv from 'dotenv';
 import * as PostgressConnectionStringParser from 'pg-connection-string';
+import polylabel from 'polylabel';
+import { Geometry } from 'geojson';
 import { config } from '../src/config';
 import { BinarySplitter } from './binarySplitter';
 import { User } from '../src/entity/user';
@@ -38,17 +40,27 @@ class ItemImporter extends Writable {
             }
           });
         }
-
+        let centroidGeom;
+        if (meta.geojson.type === 'MultiPolygon') {
+          centroidGeom = polylabel(meta.bbox);
+        } else {
+          centroidGeom = polylabel(meta.geojson.coordinates);
+        }
+        const centroid = {
+          type: 'Point',
+          coordinates: centroidGeom
+        } as Geometry ;
         const item = Item.create({
           user,
           thumbnail,
           crs,
           license,
+          centroid,
           contact: meta.contact,
           geom: meta.geojson,
           gsd: meta.gsd,
           fileSize: meta.file_size,
-          href: url,
+          href: url || meta.uuid,
           title: meta.title,
           startDatetime: meta.acquisition_start && new Date(meta.acquisition_start.$date),
           endDatetime: meta.acquisition_end && new Date(meta.acquisition_end.$date),

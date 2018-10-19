@@ -62,6 +62,16 @@ export class Item extends BaseEntity  {
   })
   geom: Geometry;
 
+  @Column('geometry', {
+    nullable: true,
+    spatialFeatureType: 'Point',
+    srid: 4326
+  })
+  @Index({
+    spatial: true
+  })
+  centroid: Geometry;
+
   @IsUrl({
     protocols: ['http', 'https', 's3'],
     require_tld: false,
@@ -119,6 +129,12 @@ export class Item extends BaseEntity  {
   })
   license: string;
 
+  @Column({
+    name: 'datetime',
+    nullable: true
+  })
+  @Index()
+  @IsOptional()
   @IsDate()
   datetime: Date;
 
