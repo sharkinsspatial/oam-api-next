@@ -17,10 +17,10 @@ router.get('/secure1', (ctx, next) => {
   ctx.body = 'Secure 1';
 });
 
-// USER ROUTES
 router.get('/users', UserController.getUsers);
 router.get('/users/:id', UserController.getUser);
 router.get('/centroids', ItemsController.getItemCentroids);
+router.post('/filteredItems', ItemsController.getFilteredItems);
 //router.post('/users', controller.user.createUser);
 //router.put('/users/:id', controller.user.updateUser);
 //router.delete('/users/:id', controller.user.deleteUser);
