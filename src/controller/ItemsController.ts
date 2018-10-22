@@ -22,7 +22,6 @@ const itemsController = {
 
   getFilteredItems: async (ctx: Context) => {
     const itemRepository: Repository<Item> = getRepository(Item);
-    // @ts-ignore
     const items = await itemRepository
       .createQueryBuilder('item')
       // @ts-ignore

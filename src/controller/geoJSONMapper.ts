@@ -9,7 +9,7 @@ const featureCollection = {
   type: 'FeatureCollection'
 };
 
-export const mapCentroids = (items) => {
+const mapCentroids = (items) => {
   featureCollection.features = items.map((item) => {
     return {
       type: 'Feature',
@@ -24,7 +24,7 @@ export const mapCentroids = (items) => {
   return featureCollection;
 };
 
-export const mapItems = (items) => {
+const mapItems = (items) => {
   featureCollection.features = items.map((item) => {
     return {
       type: 'Feature',
@@ -34,10 +34,13 @@ export const mapItems = (items) => {
         id: item.id,
         provider: item.provider,
         href: item.href,
-        title: item.title
+        title: item.title,
+        thumbnail: item.thumbnail
       }
     };
   });
 
   return featureCollection;
 };
+
+export { mapCentroids, mapItems };
