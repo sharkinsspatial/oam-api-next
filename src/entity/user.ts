@@ -48,7 +48,9 @@ export class User extends BaseEntity {
   })
   website: string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   @MaxLength(1500)
   bio: string;
 
@@ -92,7 +94,8 @@ export class User extends BaseEntity {
   updatedAt: Date;
 
   @Column({
-    name: 'mongo_id'
+    name: 'mongo_id',
+    nullable: true
   })
   mongoId: string;
 }

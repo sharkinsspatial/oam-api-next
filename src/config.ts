@@ -8,6 +8,9 @@ export interface IConfig {
   dbsslconn: boolean;
   jwtSecret: string;
   databaseUrl: string;
+  facebookClientId: string;
+  facebookClientSecret: string;
+  facebookCallbackUrl: string;
 }
 
 const config: IConfig = {
@@ -15,7 +18,10 @@ const config: IConfig = {
   debugLogging: process.env.NODE_ENV === 'development',
   dbsslconn: process.env.NODE_ENV !== 'development',
   jwtSecret: process.env.JWT_SECRET || 'your-secret-whatever',
-  databaseUrl: process.env.DATABASE_URL || 'postgres://user:pass@localhost:5432/apidb'
+  databaseUrl: process.env.DATABASE_URL || 'postgres://user:pass@localhost:5432/apidb',
+  facebookClientId: process.env.FACEBOOK_CLIENT_ID,
+  facebookClientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+  facebookCallbackUrl: process.env.FACEBOOK_CALLBACK_URL
 };
 
 export { config };

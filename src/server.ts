@@ -4,6 +4,8 @@ import * as helmet from 'koa-helmet';
 import * as cors from '@koa/cors';
 import * as winston from 'winston';
 import * as dotenv from 'dotenv';
+import * as passport from 'koa-passport';
+import * as session from 'koa-session';
 import { createConnection } from 'typeorm';
 import 'reflect-metadata';
 import * as PostgressConnectionStringParser from 'pg-connection-string';
@@ -44,6 +46,9 @@ createConnection({
 
   const app = new Koa();
 
+  app.keys = ['secret'];
+  app.use(session({}, app));
+
   // Provides important security headers to make your app more secure
   app.use(helmet());
 
@@ -56,6 +61,8 @@ createConnection({
   // Enable bodyParser with default options
   app.use(bodyParser());
 
+  app.use(passport.initialize());
+  app.use(passport.session());
   // JWT middleware -> below this line routes are only reached if JWT token
   // is valid, secret as env variable
   // app.use(jwt({ secret: config.jwtSecret }));
