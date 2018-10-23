@@ -154,6 +154,13 @@
   dependencies:
     koa-jwt "*"
 
+"@types/koa-passport@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@types/koa-passport/-/koa-passport-4.0.2.tgz#a0277352538f12e7bef2b9991475861eb6938ae9"
+  dependencies:
+    "@types/koa" "*"
+    "@types/passport" "*"
+
 "@types/koa-router@^7.0.28":
   version "7.0.32"
   resolved "https://registry.yarnpkg.com/@types/koa-router/-/koa-router-7.0.32.tgz#a2d8adc65ad3d58aeb94d056650920c085817697"
@@ -201,6 +208,12 @@
 "@types/node@*", "@types/node@^10.7.0":
   version "10.11.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.0.tgz#ddd0d67a3b6c3810dd1a59e36675fa82de5e19ae"
+
+"@types/passport@*":
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.4.6.tgz#1c6a1a3fd105e9354816e179c5c9cd13852864d1"
+  dependencies:
+    "@types/express" "*"
 
 "@types/polylabel@^1.0.5":
   version "1.0.5"
@@ -1487,7 +1500,7 @@ js-yaml@^3.7.0:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jsonwebtoken@8.3.0:
+jsonwebtoken@8.3.0, jsonwebtoken@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.3.0.tgz#056c90eee9a65ed6e6c72ddb0a1d325109aaf643"
   dependencies:

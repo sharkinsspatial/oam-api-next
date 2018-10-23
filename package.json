@@ -46,9 +46,11 @@
   "dependencies": {
     "@koa/cors": "^2.2.1",
     "@turf/bbox-polygon": "^6.0.1",
+    "@types/koa-passport": "^4.0.2",
     "class-validator": "^0.9.1",
     "dotenv": "^6.0.0",
     "geojson": "^0.5.0",
+    "jsonwebtoken": "^8.3.0",
     "koa": "^2.5.1",
     "koa-bodyparser": "4.2.1",
     "koa-helmet": "^4.0.0",
