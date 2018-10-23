@@ -4,7 +4,7 @@ import { ImportMock } from 'ts-mock-imports';
 import { Context } from 'koa';
 import ItemsController from '../src/controller/ItemsController';
 import * as typeorm from 'typeorm';
-import * as geoJSONMapper from '../src/controller/geoJSONMapper';
+import * as geoJSONMapper from '../src/util/geoJSONMapper';
 
 test('ItemsController getItemCentroids', async (t) => {
   const items = ['item1', 'item2'];

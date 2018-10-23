@@ -3,7 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import * as koaBodyparser from 'koa-bodyparser';
 import { validate, ValidationError } from 'class-validator';
 import { Item } from '../entity/item';
-import { mapCentroids, mapItems } from './geoJSONMapper';
+import { mapCentroids, mapItems } from '../util/geoJSONMapper';
 
 const itemsController = {
   getItemCentroids: async (ctx: Context) => {
