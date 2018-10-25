@@ -1,38 +1,25 @@
-# Node - Koa - Typescript Project
+# oam-api-next
 
-
-[![NPM version](https://img.shields.io/npm/v/node-typescript-koa-rest.svg)](https://www.npmjs.com/package/node-typescript-koa-rest)
-[![Dependency Status](https://david-dm.org/javieraviles/node-typescript-koa-rest.svg)](https://david-dm.org/javieraviles/node-typescript-koa-rest)
-[![Build Status](https://travis-ci.org/javieraviles/node-typescript-koa-rest.svg?branch=develop)](https://travis-ci.org/javieraviles/node-typescript-koa-rest)
-
-
-The main purpose of this repository is to build a good project setup and workflow for writing a Node api rest in TypeScript using KOA and an SQL DB.
-
-Koa is a new web framework designed by the team behind Express, which aims to be a smaller, more expressive, and more robust foundation for web applications and APIs. Through leveraging generators Koa allows you to ditch callbacks and greatly increase error-handling. Koa does not bundle any middleware within core, and provides an elegant suite of methods that make writing servers fast and enjoyable.
-
-Through a Travis-Heroku CI pipeline, this boilerplate is deployed [here](https://node-typescript-koa-rest.herokuapp.com/)! You can try to make requests to the different defined endpoints and see how it works. The following Authorization header will have to be set (already signed with the boilerplate's secret) to pass the JWT middleware:
-
-HEADER
-```
-Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSmF2aWVyIEF2aWxlcyIsImVtYWlsIjoiYXZpbGVzbG9wZXouamF2aWVyQGdtYWlsLmNvbSJ9.7oxEVGy4VEtaDQyLiuoDvzdO0AyrNrJ_s9NU3vko5-k
-```
+This repository is the API supporting the next iteration of the `oam-browser`, [oam-browser-next](https://github.com/sharkinsspatial/oam-browser-next).
+Thanks to [javieraviles](https://github.com/javieraviles) for the great boilerplate [application](https://github.com/javieraviles/node-typescript-koa-rest) on which this is based.
 
 AVAILABLE ENDPOINTS
 
 | method             | resource         | description                                                                                    |
 |:-------------------|:-----------------|:-----------------------------------------------------------------------------------------------|
 | `GET`              | `/`              | Simple hello world response                                                                    |
-| `GET`              | `/jwt`           | Dummy endpoint to show how JWT info gets stored in ctx.state                                   |
-| `GET`              | `/users`         | returns the collection of users present in the DB                                              |
-| `GET`              | `/users/:id`     | returns the specified id user                                                                  |
-| `POST`             | `/users`         | creates a user in the DB (object user to be includued in request's body)                       |
-| `PUT`              | `/users/:id`     | updates an already created user in the DB (object user to be includued in request's body)      |
-| `DELETE`           | `/users/:id`     | deletes a user from the DB (JWT token user ID must be the same as the user you want to delete) |
+| `GET`              | `oauth/jwt`      | Get JWT for making secure API requests. 
+| `GET`              | `/users`         | Returns the collection of users present in the DB                                              |
+| `GET`              | `/users/:id`     | Returns the specified id user                                                                  |
+| `GET`              | `/centroids`     | Returns collection of image items with only their id and centroid geometry.
+| `POST`             | `/filteredItems` | Returns collection of image items with ids matching those in the request body.
+| `GET`              | `/signupload`    | Provides crytpographic signing of multi-part S3 uploads for use with client EvaporateJS.
+| `GET`              | `/oauth/facebook`| Provides Passport authentication of user via Facbook 
 
 
 ## Pre-reqs
 To build and run this app locally you will need:
-- Install [Node.js](https://nodejs.org/en/)
+- Install [Yarn](https://yarnpkg.com/en/)
 
 ## Features:
  * Nodemon - server auto-restarts when code changes
@@ -40,7 +27,6 @@ To build and run this app locally you will need:
  * TypeORM (SQL DB) with basic CRUD included
  * Class-validator - Decorator based entities validation
  * Docker-compose ready to go
- * Travis CI - Heroku deployment prepared
 
 ## Included middleware:
  * koa-router
@@ -49,16 +35,17 @@ To build and run this app locally you will need:
  * JWT auth koa-jwt
  * Helmet (security headers)
  * CORS
+ * koa-passport (Social logins)
 
 # Getting Started
 - Clone the repository
 ```
-git clone --depth=1 https://github.com/javieraviles/node-typescript-koa-rest.git <project_name>
+git clone --depth=1 https://github.com/sharkinsspatial/oam-api-next
 ```
 - Install dependencies
 ```
 cd <project_name>
-npm install
+yarn install
 ```
 - Run the project directly in TS
 ```
@@ -140,10 +127,15 @@ For further documentation regarding validations see [class-validator docs](https
 ## Environment variables
 Create a .env file (or just rename the .example.env) containing all the env variables you want to set, dotenv library will take care of setting them. This project is using three variables at the moment:
 
- * PORT -> port where the server will be started on, Heroku will set this env variable automatically
- * NODE_ENV -> environment, development value will set the logger as debug level, also important for CI. In addition will determine if the ORM connects to the DB through SSL or not.
- * JWT_SECRET -> secret value, JWT tokens should be signed with this value
+ * PORT -> Port where the server will be started on, Heroku will set this env variable automatically
+ * NODE_ENV -> Environment, development value will set the logger as debug level, also important for CI. In addition will determine if the ORM connects to the DB through SSL or not.
+ * JWT_SECRET -> Secret value, JWT tokens should be signed with this value
  * DATABASE_URL -> DB connection data in connection-string format.
+ * FACEBOOK_CLIENT_ID -> The Facebook client application Id from [here](https://developers.facebook.com/)
+ * FACEBOOK_CLIENT_SECRET -> The Facebook client application Secret from [here](https://developers.facebook.com/)
+ * AWS_ACCESS_KEY -> The access key for the AWS IAM role to manage access to the uploads S3 bucket
+ * AWS_SECRET_ACCESS_KEY -> The secret access key for the AWS IAM role to manage access to the uploads S3 bucket
+ * AWS_REGION -> The AWS region for the uploads S3 bucket.
 
 ## Getting TypeScript
 TypeScript itself is simple to add to any project with `npm`.
@@ -224,14 +216,6 @@ There is also a `files` option which takes an array of individual file names whi
 
 
 ## Running the build
-All the different build steps are orchestrated via [npm scripts](https://docs.npmjs.com/misc/scripts).
-Npm scripts basically allow us to call (and chain) terminal commands via npm.
-This is nice because most JavaScript tools have easy to use command line utilities allowing us to not need grunt or gulp to manage our builds.
-If you open `package.json`, you will see a `scripts` section with all the different scripts you can call.
-To call a script, simply run `npm run <script-name>` from the command line.
-You'll notice that npm scripts can call each other which makes it easy to compose complex builds out of simple individual build scripts.
-Below is a list of all the scripts this template has available:
-
 
 | Npm Script | Description |
 | ------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -242,16 +226,11 @@ Below is a list of all the scripts this template has available:
 | `build-ts`                | Compiles all source `.ts` files to `.js` files in the `dist` folder                               |
 | `tslint`                  | Runs TSLint on project files                                                                      |
 | `copy-static-assets`      | Calls script that copies JS libs, fonts, and images to dist directory                             |
-
-# TSLint
-TSLint is a code linter which mainly helps catch minor code quality and style issues.
-TSLint is very similar to ESLint or JSLint but is built with TypeScript in mind.
+| `test`                    | Runs all `tape` based unit tests located int `./test`.                                            |
 
 ## TSLint rules
 Like most linters, TSLint has a wide set of configurable rules as well as support for custom rule sets.
 All rules are configured through `tslint.json`.
-In this project, we are using a fairly basic set of rules with no additional custom rules.
-The settings are largely based off the TSLint settings that we use to develop TypeScript itself.
 
 ## Running TSLint
 Like the rest of our build steps, we use npm scripts to invoke TSLint.
@@ -261,9 +240,6 @@ npm run build   // runs full build including TSLint
 npm run tslint  // runs only TSLint
 ```
 Notice that TSLint is not a part of the main watch task.
-It can be annoying for TSLint to clutter the output window while in the middle of writing a function, so I elected to only run it only during the full build.
-If you are interesting in seeing TSLint feedback as soon as possible, I strongly recommend the [TSLint extension in VS Code]().
-
 
 # Logging
 Winston is designed to be a simple and universal logging library with support for multiple transports.
@@ -274,34 +250,6 @@ A "logger" middleware passing a winstonInstance has been created. Current config
 // Logger middleware -> use winston as logger (logging.ts with config)
 app.use(logger(winston));
 ```
-
-# Authentication - Security
-The idea is to keep the API as clean as possible, therefore the auth will be done from the client using an auth provider such as Auth0. The client making requests to the API should include the JWT in the Authorization header as "Authorization: Bearer <jwt_token>". HS256 will be used as the secret will be known by both your api and your client and will be used to sign the token, so make sure you keep it hidden.
-
-As can be found in the server.ts file, a JWT middleware has been added, passing the secret from an environment variable. The middleware will validate that every request to the routes below, MUST include a valid JWT signed with the same secret. The middleware will set automatically the payload information in ctx.state.user.
-
-```
-// JWT middleware -> below this line, routes are only reached if JWT token is valid, secret as env variable
-app.use(jwt({ secret: config.jwtSecret }));
-```
-Go to the website [https://jwt.io/](https://jwt.io/) to create JWT tokens for testing/debugging purposes. Select algorithm HS256 and include the generated token in the Authorization header to pass through the jwt middleware.
-
-Custom 401 handling -> if you don't want to expose koa-jwt errors to users:
-```
-app.use(function(ctx, next){
-  return next().catch((err) => {
-    if (401 == err.status) {
-      ctx.status = 401;
-      ctx.body = 'Protected resource, use Authorization header to get access\n';
-    } else {
-      throw err;
-    }
-  });
-});
-```
-
-If you want to authenticate from the API, and you fancy the idea of an auth provider like Auth0, have a look at [jsonwebtoken — JSON Web Token signing and verification](https://github.com/auth0/node-jsonwebtoken)
-
 
 ## CORS
 This boilerplate uses @koa/cors, a simple CORS middleware for koa. If you are not sure what this is about, click [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
@@ -326,62 +274,5 @@ app.use(helmet());
 Have a look at [Official koa-helmet docs](https://github.com/venables/koa-helmet) in case you want to customize which security middlewares are enabled.
 
 
-# Dependencies
-Dependencies are managed through `package.json`.
-In that file you'll find two sections:
-## `dependencies`
-
-| Package                         | Description                                                           |
-| ------------------------------- | --------------------------------------------------------------------- |
-| dotenv                          | Loads environment variables from .env file.                           |
-| koa                             | Node.js web framework.                                                |
-| koa-bodyparser                  | A bodyparser for koa.                                                 |
-| koa-jwt                         | Middleware to validate JWT tokens.                                    |
-| koa-router                      | Router middleware for koa.                                            |
-| koa-helmet                      | Wrapper for helmet, important security headers to make app more secure| 
-| @koa/cors                       | Cross-Origin Resource Sharing(CORS) for koa                           |
-| pg                              | PostgreSQL driver, needed for the ORM.                                |
-| reflect-metadata                | Used by typeORM to implement decorators.                              |
-| typeorm                         | A very cool SQL ORM.                                                  |
-| winston                         | Logging library.                                                      |
-| class-validator                 | Decorator based entities validation.                                  |
-| pg-connection-string            | Parser for database connection string                                 |
-
-
-## `devDependencies`
-
-| Package                         | Description                                                           |
-| ------------------------------- | --------------------------------------------------------------------- |
-| @types                          | Dependencies in this folder are `.d.ts` files used to provide types   |
-| nodemon                         | Utility that automatically restarts node process when it crashes      |
-| ts-node                         | Enables directly running TS files. Used to run `copy-static-assets.ts`|
-| tslint                          | Linter (similar to ESLint) for TypeScript files                       |
-| typescript                      | JavaScript compiler/type checker that boosts JavaScript productivity  |
-| shelljs                         | Portable Unix shell commands for Node.js                              |
-
-To install or update these dependencies you can use `npm install` or `npm update`.
-
-
 ## Changelog
 
-### 1.4.1
-- Fix -> After updating winston to 3.0.0, it was throwing an error when logging errors into file
-- Fix -> Config in config.ts wasn't implementing IConfig interface
-
-### 1.4.0
-- Dotenv lib updated, no changes needed (they are dropping node4 support)
-- Class-validator lib updated, no chages needed (cool features added like IsPhoneNumber or custom context for decorators)
-- Winston lib updated to 3.0.0, some amendments needed to format the console log. Removed the @types as Winston now supports Typescript natively!
-- Some devDependencies updated as well
-
-### 1.3.0
-- CORS added
-- Syntax full REST
-- Some error handling improvement
-
-### 1.2.0
-- Heroku deployment added
-
-### 1.1.0
-- Added Helmet for security
-- Some bad practices await/async fixed

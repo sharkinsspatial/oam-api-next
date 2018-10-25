@@ -33,6 +33,4 @@ router.get('/users/:id', UserController.getUser);
 router.get('/centroids', ItemsController.getItemCentroids);
 router.post('/filteredItems', ItemsController.getFilteredItems);
 
-// router.put('/users/:id', controller.user.updateUser);
-
 export { router };
