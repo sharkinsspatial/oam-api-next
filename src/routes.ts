@@ -6,11 +6,12 @@ import GeneralController from './controller/GeneralController';
 import UserController from './controller/UserController';
 import ItemsController from './controller/ItemsController';
 import JWTController from './controller/JWTController';
+import UploadsController from './controller/UploadsController';
 
 const router = new Router();
 
 // GENERAL ROUTES
-router.use(['/secure1'], jwt({ secret: config.jwtSecret }));
+router.use(['/secure1', '/signupload'], jwt({ secret: config.jwtSecret }));
 
 router.get('/', GeneralController.helloWorld);
 
@@ -23,6 +24,8 @@ router.get('/oauth/jwtfacebook/', koaPassport.authenticate('facebook', {
   successRedirect: '/oauth/jwt',
   failureRedirect: '/'
 }));
+
+router.get('/signupload/', UploadsController.signUpload);
 
 router.get('/oauth/jwt/', JWTController.getJWT);
 router.get('/users', UserController.getUsers);

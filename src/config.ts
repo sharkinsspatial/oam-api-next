@@ -11,6 +11,9 @@ export interface IConfig {
   facebookClientId: string;
   facebookClientSecret: string;
   facebookCallbackUrl: string;
+  awsAccessKey: string;
+  awsSecretAccessKey: string;
+  awsRegion: string;
 }
 
 const config: IConfig = {
@@ -21,7 +24,10 @@ const config: IConfig = {
   databaseUrl: process.env.DATABASE_URL || 'postgres://user:pass@localhost:5432/apidb',
   facebookClientId: process.env.FACEBOOK_CLIENT_ID,
   facebookClientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  facebookCallbackUrl: process.env.FACEBOOK_CALLBACK_URL
+  facebookCallbackUrl: process.env.FACEBOOK_CALLBACK_URL,
+  awsAccessKey: process.env.AWS_ACCESS_KEY,
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  awsRegion: process.env.AWS_REGION
 };
 
 export { config };

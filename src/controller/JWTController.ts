@@ -6,8 +6,16 @@ const jwtController = {
     console.log(ctx.state.user);
     ctx.status = 200;
     const { id, name, contactEmail } = ctx.state.user;
-    const userJWT = createToken(id, name, contactEmail, 'user', '1d');
-    ctx.body = userJWT;
+    const jwt = createToken(id, name, contactEmail, 'user', '1d');
+
+    const htmlWithJWT = `
+      <html>
+        <script type="text/javascript">
+          window.opener.postMessage({"access_token": "${jwt}"}, '*');
+          window.close();
+        </script>
+      </html>`;
+    ctx.body = htmlWithJWT;
   }
 };
 
