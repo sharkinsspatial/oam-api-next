@@ -49,13 +49,17 @@ yarn install
 ```
 - Run the project directly in TS
 ```
-npm run watch-server
+yarn watch-server
 ```
 
 - Build and run the project in JS
 ```
-npm run build
-npm run start
+yarn build
+yarn start
+```
+- Run unit tests
+```
+yarn test
 ```
 
 ## Docker (optional)
@@ -66,9 +70,9 @@ It is as easy as go to the project folder and execute the command 'docker-compos
 If you use Docker natively, the host for the server which you will need to include in the ORM configuration file will be localhost, but if you were to run Docker in older Windows versions, you will be using Boot2Docker and probably your virtual machine will use your ip 192.168.99.100 as network adapter. This mean your database host will be the aforementioned ip and in case you want to access the web db client you will also need to go to http://19.168.99.100/8080
 
 ## Setting up the Database - ORM
-This API is prepared to work with an SQL database, using [TypeORM](https://github.com/typeorm/typeorm). In this case we are using postgreSQL, and that is why in the package.json 'pg' has been included. If you where to use a different SQL database remember to install the correspondent driver.
+This API is prepared to work with an postgreSQL database, using [TypeORM](https://github.com/typeorm/typeorm).
 
-The ORM configuration and connection to the database can be specified in the file 'ormconfig.json'. Here is directly in the connection to the database in 'server.ts' file because a environment variable containing databaseUrl is being used to set the connection data. This is prepared for Heroku, which provides a postgres-string-connection as env variable. In local is being mocked with the docker local postgres as can be seen in ".example.env"
+The ORM configuration and connection to the database can be specified in the file 'ormconfig.json'. Here is directly in the connection to the database in 'server.ts' file because a environment variable containing databaseUrl is being used to set the connection data. This is prepared for Heroku, which provides a postgres-string-connection as env variable.
 
 It is importante to notice that, when serving the project directly with *.ts files using ts-node,the configuration for the ORM should specify the *.ts files path, but once the project is built (transpiled) and run as plain js, it will be needed to change it accordingly to find the built js files:
 
@@ -125,7 +129,7 @@ For further documentation regarding validations see [class-validator docs](https
 
 
 ## Environment variables
-Create a .env file (or just rename the .example.env) containing all the env variables you want to set, dotenv library will take care of setting them. This project is using three variables at the moment:
+Create a .env file (or just rename the .example.env) containing all the env variables you want to set, dotenv library will take care of setting them.
 
  * PORT -> Port where the server will be started on, Heroku will set this env variable automatically
  * NODE_ENV -> Environment, development value will set the logger as debug level, also important for CI. In addition will determine if the ORM connects to the DB through SSL or not.
@@ -137,22 +141,13 @@ Create a .env file (or just rename the .example.env) containing all the env vari
  * AWS_SECRET_ACCESS_KEY -> The secret access key for the AWS IAM role to manage access to the uploads S3 bucket
  * AWS_REGION -> The AWS region for the uploads S3 bucket.
 
-## Getting TypeScript
-TypeScript itself is simple to add to any project with `npm`.
-```
-npm install -D typescript
-```
-If you're using VS Code then you're good to go!
-VS Code will detect and use the TypeScript version you have installed in your `node_modules` folder. 
-For other editors, make sure you have the corresponding [TypeScript plugin](http://www.typescriptlang.org/index.html#download-links). 
-
 ## Project Structure
 The most obvious difference in a TypeScript + Node project is the folder structure.
 TypeScript (`.ts`) files live in your `src` folder and after compilation are output as JavaScript (`.js`) in the `dist` folder.
 
 The full folder structure of this app is explained below:
 
-> **Note!** Make sure you have already built the app using `npm run build`
+> **Note!** Make sure you have already built the app using `yarn build`
 
 | Name | Description |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
@@ -219,7 +214,7 @@ There is also a `files` option which takes an array of individual file names whi
 
 | Npm Script | Description |
 | ------------------------- | ------------------------------------------------------------------------------------------------- |
-| `start`                   | Does the same as 'npm run serve'. Can be invoked with `npm start`                                 |
+| `start`                   | Does the same as 'yarn serve'. Can be invoked with `yarn start`                                 |
 | `build`                   | Full build. Runs ALL build tasks (`build-ts`, `tslint`, `copy-static-assets`)                     |
 | `serve`                   | Runs node on `dist/server/server.js` which is the apps entry point                                |
 | `watch-server`            | Nodemon, process restarts if crashes. Continuously watches `.ts` files and re-compiles to `.js`   |
@@ -236,8 +231,8 @@ All rules are configured through `tslint.json`.
 Like the rest of our build steps, we use npm scripts to invoke TSLint.
 To run TSLint you can call the main build script or just the TSLint task.
 ```
-npm run build   // runs full build including TSLint
-npm run tslint  // runs only TSLint
+yarn build   // runs full build including TSLint
+yarn tslint  // runs only TSLint
 ```
 Notice that TSLint is not a part of the main watch task.
 
