@@ -10,14 +10,14 @@ const featureCollection = {
 };
 
 const mapCentroids = (items) => {
-  console.log(items.length);
   featureCollection.features = items.map((item) => {
+    const { id } = item;
     return {
+      id,
       type: 'Feature',
-      id: item.id,
       geometry: item.centroid,
       properties: {
-        id: item.id
+        id
       }
     };
   });
@@ -44,6 +44,12 @@ const mapItems = (items, host) => {
       keywords,
       user
     } = item;
+
+    const {
+      id: userId = '',
+      name: userName = ''
+    } = user || {};
+
     return {
       id,
       type: 'Feature',
@@ -74,8 +80,8 @@ const mapItems = (items, host) => {
         'eo:gsd': gsd,
         'eo:platform': platform,
         'eo:instrument': instrument,
-        'oam:uploaderid': user.id,
-        'oam:uploadername': user.name
+        'oam:uploaderid': userId,
+        'oam:uploadername': userName
       }
     };
   });
