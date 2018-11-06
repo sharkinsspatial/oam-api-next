@@ -10,6 +10,31 @@ import { BinarySplitter } from './binarySplitter';
 import { User } from '../src/entity/user';
 import { Item } from '../src/entity/item';
 
+const parseContact = (contactString) => {
+  let contactEmail;
+  let contactName;
+  if (contactString) {
+    if (contactString.includes(' - ')) {
+      const parts = contactString.split(' - ');
+      contactName = parts[0].trim();
+      contactEmail = parts[1].trim();
+    } else if (contactString.includes(',')) {
+      const parts = contactString.split(',');
+      contactName = parts[0].trim();
+      contactEmail = parts[1].trim();
+    } else {
+      const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (reg.test(contactString)) {
+        contactEmail = contactString.trim();
+      } else {
+        const parts = contactString.split(' ');
+        contactEmail = parts[parts.length - 1].trim();
+      }
+    }
+  }
+  return { contactEmail, contactName };
+};
+
 class ItemImporter extends Writable {
   constructor() {
     super({
@@ -31,45 +56,60 @@ class ItemImporter extends Writable {
         url,
         ...properties
       } = meta.properties;
-
-      if (meta.provider !== 'Astro Digital') {
-        let user;
-        if (meta.user != null) {
-          user = await User.findOne({
+      const {
+        provider,
+        user,
+        geojson,
+        bbox,
+        contact,
+        gsd,
+        file_size,
+        title,
+        acquisition_start,
+        acquisition_end,
+        platform,
+        uuid
+      } = meta;
+      if (provider !== 'Astro Digital') {
+        let dbUser;
+        if (user != null) {
+          dbUser = await User.findOne({
             where: {
               mongoId: meta.user.$oid
             }
           });
         }
         let centroidGeom;
-        if (meta.geojson.type === 'MultiPolygon') {
-          const bboxGeoJSON = bboxPolygon(meta.bbox);
+        if (geojson.type === 'MultiPolygon') {
+          const bboxGeoJSON = bboxPolygon(bbox);
           centroidGeom = polylabel(bboxGeoJSON.geometry.coordinates);
         } else {
-          centroidGeom = polylabel(meta.geojson.coordinates);
+          centroidGeom = polylabel(geojson.coordinates);
         }
         const centroid = {
           type: 'Point',
           coordinates: centroidGeom
         } as Geometry ;
+        const { contactEmail, contactName } = parseContact(contact);
         const item = Item.create({
-          user,
           thumbnail,
           crs,
           license,
           centroid,
-          contact: meta.contact,
-          geom: meta.geojson,
-          gsd: meta.gsd,
-          fileSize: meta.file_size,
-          href: url || meta.uuid,
-          title: meta.title,
-          startDatetime: meta.acquisition_start && new Date(meta.acquisition_start.$date),
-          endDatetime: meta.acquisition_end && new Date(meta.acquisition_end.$date),
-          platform: meta.platform.toLowerCase(),
+          contactName,
+          contactEmail,
+          gsd,
+          title,
+          provider,
+          user: dbUser,
+          geom: geojson,
+          fileSize: file_size,
+          href: url || uuid,
+          startDatetime: acquisition_start && new Date(acquisition_start.$date),
+          endDatetime: acquisition_end && new Date(acquisition_end.$date),
+          platform: platform.toLowerCase(),
           instrument: sensor,
-          keywords: tags,
-          provider: meta.provider
+          keywords: tags
         });
         await item.save();
       }

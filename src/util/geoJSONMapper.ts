@@ -10,6 +10,7 @@ const featureCollection = {
 };
 
 const mapCentroids = (items) => {
+  console.log(items.length);
   featureCollection.features = items.map((item) => {
     return {
       type: 'Feature',
@@ -24,18 +25,54 @@ const mapCentroids = (items) => {
   return featureCollection;
 };
 
-const mapItems = (items) => {
+const mapItems = (items, host) => {
   featureCollection.features = items.map((item) => {
+    const {
+      id,
+      geom,
+      thumbnail,
+      href,
+      title,
+      provider,
+      license,
+      datetime,
+      startDatetime,
+      endDatetime,
+      platform,
+      instrument,
+      gsd,
+      keywords
+    } = item;
     return {
+      id,
       type: 'Feature',
-      id: item.id,
-      geometry: item.geom,
+      geometry: geom,
+      links: [{
+        rel: 'self',
+        href: `$http://{host}/items/${id}`
+      }],
+      assets: {
+        thumbnail: {
+          href: thumbnail
+        },
+        primary: {
+          href
+        }
+      },
       properties: {
-        id: item.id,
-        provider: item.provider,
-        href: item.href,
-        title: item.title,
-        thumbnail: item.thumbnail
+        id,
+        datetime,
+        title,
+        keywords,
+        'item:providers': [{
+          name: provider
+        }],
+        'item:license': license,
+        'dtr:start_datetime': startDatetime,
+        'dtr:end_datetime': endDatetime,
+        'eo:gsd': gsd,
+        'eo:platform': platform,
+        'eo:instrument': instrument
       }
     };
   });

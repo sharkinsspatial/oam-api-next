@@ -5,6 +5,7 @@ import {
   IsDefined,
   IsNotEmpty,
   IsIn,
+  IsEmail,
   validate
 } from 'class-validator';
 
@@ -50,7 +51,14 @@ export class Item extends BaseEntity  {
   @Column({
     nullable: true
   })
-  contact: string;
+  contactName: string;
+
+  @Column({
+    nullable: true
+  })
+  @IsOptional()
+  @IsEmail()
+  contactEmail: string;
 
   @Column('geometry', {
     nullable: true,

@@ -101,6 +101,15 @@ createConnection({
 
 You can find an implemented **CRUD of the entity user** in the correspondent controller controller/user.ts and its routes in routes.ts file.
 
+## Legacy MongoDB data
+With the database running you can import legacy user and metadata data exported from MongoDB with import scripts found in `importScripts`.  Use the following commands
+```
+yarn ts-node importScripts/importItems.ts < importScripts/metas.json
+```
+```
+yarn ts-node importScripts/importUsers.ts < importScripts/users.json
+```
+
 ## Entities validation
 This project uses the library class-validator, a decorator-based entity validation, which is used directly in the entities files as follows:
 ```
@@ -153,6 +162,7 @@ The full folder structure of this app is explained below:
 | ------------------------ | --------------------------------------------------------------------------------------------- |
 | **dist**                 | Contains the distributable (or output) from your TypeScript build. This is the code you ship  |
 | **node_modules**         | Contains all your npm dependencies                                                            |
+| **importScripts**        | Contains scripts for importing legacy MongoDB data                                            |
 | **src**                  | Contains your source code that will be compiled to the dist dir                               |
 | **src**/server.ts        | Entry point to your KOA app                                                                   |
 | .travis.yml              | Used to configure Travis CI build                                                             |
