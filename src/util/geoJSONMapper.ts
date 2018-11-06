@@ -41,7 +41,8 @@ const mapItems = (items, host) => {
       platform,
       instrument,
       gsd,
-      keywords
+      keywords,
+      user
     } = item;
     return {
       id,
@@ -72,7 +73,9 @@ const mapItems = (items, host) => {
         'dtr:end_datetime': endDatetime,
         'eo:gsd': gsd,
         'eo:platform': platform,
-        'eo:instrument': instrument
+        'eo:instrument': instrument,
+        'oam:uploaderid': user.id,
+        'oam:uploadername': user.name
       }
     };
   });

@@ -24,6 +24,7 @@ const itemsController = {
     const itemRepository: Repository<Item> = getRepository(Item);
     const items = await itemRepository
       .createQueryBuilder('item')
+      .leftJoinAndSelect('item.user', 'user')
       // @ts-ignore
       .where('item.id IN (:...itemIds)', { itemIds: ctx.request.body })
       .getMany();
