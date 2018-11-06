@@ -27,10 +27,9 @@ const itemsController = {
       // @ts-ignore
       .where('item.id IN (:...itemIds)', { itemIds: ctx.request.body })
       .getMany();
-    //const filteredItems = mapItems(items, 'localhost');
+    const filteredItems = mapItems(items, 'localhost');
     ctx.status = 200;
-    //ctx.body = filteredItems;
-    ctx.body = items;
+    ctx.body = filteredItems;
   }
 };
 

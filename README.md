@@ -103,11 +103,12 @@ You can find an implemented **CRUD of the entity user** in the correspondent con
 
 ## Legacy MongoDB data
 With the database running you can import legacy user and metadata data exported from MongoDB with import scripts found in `importScripts`.  Use the following commands
-```
-yarn ts-node importScripts/importItems.ts < importScripts/metas.json
-```
+Note that users must be loaded first to maintain referential integrity.
 ```
 yarn ts-node importScripts/importUsers.ts < importScripts/users.json
+```
+```
+yarn ts-node importScripts/importItems.ts < importScripts/metas.json
 ```
 
 ## Entities validation

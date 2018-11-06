@@ -49,7 +49,7 @@ const mapItems = (items, host) => {
       geometry: geom,
       links: [{
         rel: 'self',
-        href: `$http://{host}/items/${id}`
+        href: `http://${host}/items/${id}`
       }],
       assets: {
         thumbnail: {
